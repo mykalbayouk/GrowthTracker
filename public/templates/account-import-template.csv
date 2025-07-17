@@ -1,0 +1,4 @@
+Account Name,Starting Balance,Interest Rate,Compound Frequency,Goal Type,Target Amount,Target Date,Monthly Contribution
+My Savings Account,1000,2.5,monthly,amount,5000,,100
+Emergency Fund,500,1.8,monthly,date,,2025-12-31,200
+Retirement Fund,2000,5.0,yearly,default,,,300
