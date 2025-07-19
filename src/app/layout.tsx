@@ -4,6 +4,8 @@ import "./globals.css";
 import { AccountProvider } from "@/lib/context/AccountContext";
 import { ThemeProvider } from "@/lib/context/ThemeContext";
 import { SettingsProvider } from "@/lib/context/SettingsContext";
+import { ChatProvider } from "@/lib/context/ChatContext";
+import { ChatAssistant } from "@/components/Chat/ChatAssistant";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +35,10 @@ export default function RootLayout({
         <ThemeProvider>
           <SettingsProvider>
             <AccountProvider>
-              {children}
+              <ChatProvider>
+                {children}
+                <ChatAssistant />
+              </ChatProvider>
             </AccountProvider>
           </SettingsProvider>
         </ThemeProvider>

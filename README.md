@@ -33,6 +33,13 @@ A comprehensive savings calculator application built with Next.js and React that
 - Customizable display preferences
 - Local storage for data persistence
 
+### AI Assistant (BETA)
+- **Natural Language Interaction**: Ask questions about your savings goals in plain English
+- **Account Creation**: Create accounts by describing what you want (e.g., "Create a high-yield savings account with $5000 starting balance and 4% interest rate")
+- **Financial Guidance**: Get help understanding compound interest, goal setting, and savings strategies
+- **Smart Suggestions**: Receive personalized recommendations based on your accounts and goals
+- **Multiple AI Providers**: Supports OpenAI and Google Gemini (API key required)
+
 ## 🛠 Technical Stack
 
 - **Framework**: Next.js 15 with App Router
@@ -84,6 +91,24 @@ bun dev
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
+### AI Assistant Configuration (Optional)
+
+To use the AI assistant feature:
+
+1. Obtain an API key from either:
+   - [OpenAI](https://platform.openai.com/api-keys) - For GPT models
+   - [Google AI Studio](https://aistudio.google.com/app/apikey) - For Gemini models
+
+2. In the application:
+   - Open Settings (gear icon)
+   - Configure your preferred AI provider
+   - Enter your API key
+   - Save settings
+
+3. The AI assistant will now be available via the chat toggle button
+
+**Note**: API keys are stored locally in your browser and never sent to our servers. The AI assistant requires an internet connection to function.
+
 ## 📱 Usage
 
 ### Creating Your First Account
@@ -116,6 +141,16 @@ bun dev
 - Click "Export" to download your account data as an Excel file
 - Includes account details, projections, and goal progress
 
+### Using the AI Assistant (BETA)
+1. Click the chat toggle button to open the AI assistant
+2. Configure your AI provider (OpenAI or Google Gemini) in settings with your API key
+3. Ask questions in natural language:
+   - "Create a savings account for my vacation fund with $2000 and 3.5% interest"
+   - "How much should I save monthly to reach $50,000 in 5 years?"
+   - "Compare my high-yield and regular savings accounts"
+4. The assistant can create accounts, provide financial advice, and help optimize your savings strategy
+5. Note: This feature requires an API key from OpenAI or Google Gemini
+
 ## 🏗 Project Structure
 
 ```
@@ -132,10 +167,12 @@ webapp/
 │   │   ├── ExportButton.tsx   # Data export functionality
 │   │   ├── SettingsModal.tsx  # App settings
 │   │   ├── Charts/            # Data visualization components
+│   │   ├── Chat/              # AI assistant components (BETA)
 │   │   └── Import/            # Data import components
 │   ├── lib/                   # Utility functions and logic
 │   │   ├── calculations.ts    # Compound interest calculations
 │   │   ├── types.ts          # TypeScript type definitions
+│   │   ├── chat/             # AI assistant logic (BETA)
 │   │   ├── context/          # React Context providers
 │   │   ├── hooks/            # Custom React hooks
 │   │   ├── import/           # File parsing and validation
