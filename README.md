@@ -242,4 +242,35 @@ To learn more about the technologies used:
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+### Vercel Deployment Steps
+
+1. **Fork or clone this repository**
+2. **Connect to Vercel:**
+   - Go to [vercel.com](https://vercel.com)
+   - Connect your GitHub account
+   - Import your repository
+3. **Configure Environment Variables (Optional for AI Assistant):**
+   - In your Vercel dashboard, go to Settings > Environment Variables
+   - Add your API keys:
+     - `OPENAI_API_KEY` (for OpenAI GPT models)
+     - `GEMINI_API_KEY` (for Google Gemini models)
+     - `AI_PROVIDER` (set to 'openai' or 'gemini')
+4. **Deploy:**
+   - Vercel will automatically build and deploy your app
+   - Your app will be available at a vercel.app URL
+
+### Build Requirements
+
+- **Node.js 18+** 
+- **Tailwind CSS v3.4+** (for styling)
+- **Next.js 15** (App Router)
+
+### Build Optimizations
+
+The project includes several optimizations for production deployment:
+- Package import optimization for better tree-shaking
+- Standalone output for efficient serverless deployment
+- Proper PostCSS configuration for Tailwind CSS
+- TypeScript strict mode compliance
+
 Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details on deployment options.

@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_MAX_CHAT_HISTORY: process.env.NEXT_PUBLIC_MAX_CHAT_HISTORY || '50',
     NEXT_PUBLIC_AI_FALLBACK_ENABLED: process.env.NEXT_PUBLIC_AI_FALLBACK_ENABLED || 'true',
   },
+  // Optimize for Vercel deployment
+  output: 'standalone',
+  experimental: {
+    optimizePackageImports: ['@heroicons/react', 'recharts']
+  }
 };
 
 export default nextConfig;
