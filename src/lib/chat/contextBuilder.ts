@@ -1,8 +1,38 @@
 import { Account, ProjectionData, GoalProjection } from '../types';
 import { calculateAccountProjections, calculateGoalProjection } from '../calculations';
+import { ChatMessage } from './types';
+
+interface AccountContext {
+  id: string;
+  name: string;
+  startingBalance: number;
+  currentBalance: number;
+  interestRate: number;
+  compoundFrequency: string;
+  goalType: string;
+  targetAmount?: number;
+  targetDate?: Date;
+  monthlyContribution?: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Context {
+  accounts: AccountContext[];
+  summary: string;
+  recentHistory: ChatMessage[];
+  timestamp: string;
+}
+
+interface CalculationContext {
+  account: Account;
+  projection: ProjectionData[];
+  goalProjection: GoalProjection | null;
+  projectionSummary: string;
+}
 
 export class ContextBuilder {
-  static buildContext(accounts: Account[], chatHistory: any[] = []): any {
+  static buildContext(accounts: Account[], chatHistory: ChatMessage[] = []): Context {
     const context = {
       accounts: accounts.map(account => ({
         id: account.id,
@@ -51,7 +81,7 @@ export class ContextBuilder {
     return summary;
   }
 
-  static buildCalculationContext(account: Account): any {
+  static buildCalculationContext(account: Account): CalculationContext {
     const projection = calculateAccountProjections(account, 60); // 5 years
     const goalProjection = account.targetAmount ? calculateGoalProjection(account) : null;
 

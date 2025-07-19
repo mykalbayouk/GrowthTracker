@@ -1,9 +1,25 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 import { AIServiceProvider, ParsedAccountData } from '../types';
+
+interface ContextData {
+  accounts?: Array<{
+    id: string;
+    name: string;
+    currentBalance: number;
+    interestRate: number;
+    [key: string]: unknown;
+  }>;
+  messages?: Array<{
+    role: string;
+    content: string;
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+}
 
 export class GeminiService implements AIServiceProvider {
   private genAI: GoogleGenerativeAI;
-  private model: any;
+  private model: GenerativeModel;
   private systemPrompt: string;
 
   constructor() {
@@ -29,7 +45,7 @@ export class GeminiService implements AIServiceProvider {
     Always be helpful but brief. Save the detailed explanations for when users specifically ask "how" or "why".`;
   }
 
-  async processMessage(userMessage: string, context: any): Promise<string> {
+  async processMessage(userMessage: string, context: ContextData): Promise<string> {
     try {
       const prompt = `${this.systemPrompt}
       
@@ -46,7 +62,7 @@ export class GeminiService implements AIServiceProvider {
     }
   }
 
-  async parseAccountData(userMessage: string, conversationContext?: any): Promise<ParsedAccountData> {
+  async parseAccountData(userMessage: string, conversationContext?: ContextData): Promise<ParsedAccountData> {
     try {
       // Only extract account data if user explicitly confirms they want to create an account
       const confirmationKeywords = [
@@ -74,7 +90,7 @@ export class GeminiService implements AIServiceProvider {
 
       // Include recent conversation context to understand what account to create
       const contextMessages = conversationContext?.messages || [];
-      const recentContext = contextMessages.slice(-5).map((msg: any) => 
+      const recentContext = contextMessages.slice(-5).map((msg) => 
         `${msg.role}: ${msg.content}`
       ).join('\n');
 

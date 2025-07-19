@@ -35,9 +35,25 @@ export interface ParsedAccountData {
   missingInfo?: string[];
 }
 
+interface ContextData {
+  accounts?: Array<{
+    id: string;
+    name: string;
+    currentBalance: number;
+    interestRate: number;
+    [key: string]: unknown;
+  }>;
+  messages?: Array<{
+    role: string;
+    content: string;
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+}
+
 export interface AIServiceProvider {
-  processMessage(userMessage: string, context: any): Promise<string>;
-  parseAccountData(userMessage: string, conversationContext?: any): Promise<ParsedAccountData>;
+  processMessage(userMessage: string, context: ContextData): Promise<string>;
+  parseAccountData(userMessage: string, conversationContext?: ContextData): Promise<ParsedAccountData>;
 }
 
 export interface ChatConfig {

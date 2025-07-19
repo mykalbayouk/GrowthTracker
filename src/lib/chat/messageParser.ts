@@ -107,12 +107,6 @@ export class MessageParser {
   }
 
   private static extractAmount(message: string, keywords: string[]): number | undefined {
-    const patterns = [
-      /\$?([\d,]+(?:\.\d{2})?)/g,
-      /(\d+(?:,\d{3})*(?:\.\d{2})?)\s*dollars?/gi,
-      /(\d+(?:,\d{3})*(?:\.\d{2})?)\s*k/gi
-    ];
-    
     for (const keyword of keywords) {
       const keywordPattern = new RegExp(`${keyword}[^\\d]*\\$?([\\d,]+(?:\\.\\d{2})?)`, 'gi');
       const match = message.match(keywordPattern);
@@ -170,8 +164,6 @@ export class MessageParser {
     targetAmount?: number;
     targetDate?: Date;
   } {
-    const lowerMessage = message.toLowerCase();
-    
     // Look for target amount
     const targetAmount = this.extractAmount(message, ['goal', 'target', 'want', 'need', 'reach']);
     
@@ -201,7 +193,7 @@ export class MessageParser {
     for (const pattern of datePatterns) {
       const match = message.match(pattern);
       if (match) {
-        let dateStr = match[1];
+        const dateStr = match[1];
         
         // Handle "in X years" format
         if (match[0].toLowerCase().includes('in') && match[0].toLowerCase().includes('years')) {

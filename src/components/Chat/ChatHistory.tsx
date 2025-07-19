@@ -3,7 +3,6 @@
 import React, { useEffect, useRef } from 'react';
 import { ChatMessage } from '../../lib/chat/types';
 import { ChatBubble } from './ChatBubble';
-import { ChatTyping } from './ChatTyping';
 
 interface ChatHistoryProps {
   messages: ChatMessage[];
@@ -28,10 +27,10 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({ messages }) => {
             <span className="text-blue-600 dark:text-blue-400 font-bold">AI</span>
           </div>
           <p className="text-sm">
-            Hi! I'm your financial assistant. I can help you create savings accounts, calculate goals, and answer questions about your finances.
+            Hi! I&apos;m your financial assistant. I can help you create savings accounts, calculate goals, and answer questions about your finances.
           </p>
           <p className="text-xs mt-2 text-gray-400">
-            Try asking: "I want to save $10,000 for a vacation in 2 years with 5% interest"
+            Try asking: &quot;I want to save $10,000 for a vacation in 2 years with 5% interest&quot;
           </p>
         </div>
       )}

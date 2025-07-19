@@ -1,7 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useCallback, ReactNode } from 'react';
-import { useDebounce } from 'use-debounce';
+import React, { createContext, useContext, useReducer, useCallback, useMemo, ReactNode } from 'react';
 import { ChatMessage, ChatState } from '../chat/types';
 import { AIServiceFactory } from '../chat/aiService';
 import { AccountGenerator } from '../chat/accountGenerator';
@@ -76,8 +75,8 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     (process.env.NEXT_PUBLIC_AI_PROVIDER as 'openai' | 'gemini') || 'openai'
   );
   
-  // Initialize account generator
-  const accountGenerator = new AccountGenerator(addAccount);
+  // Initialize account generator with useMemo to prevent recreation on every render
+  const accountGenerator = useMemo(() => new AccountGenerator(addAccount), [addAccount]);
 
   const sendMessage = useCallback(async (message: string) => {
     try {
@@ -98,7 +97,14 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       try {
         // Check if this is an account creation request
         console.log('🔍 ChatContext: Processing message:', message);
-        const parsedData = await aiService.parseAccountData(message, { messages: state.messages });
+        const parsedData = await aiService.parseAccountData(message, { 
+          messages: state.messages.map(msg => ({
+            role: msg.role,
+            content: msg.content,
+            id: msg.id,
+            timestamp: msg.timestamp
+          }))
+        });
         console.log('🔍 ChatContext: Parsed data:', parsedData);
         
         let createdAccountIds: string[] = [];
@@ -130,7 +136,26 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           aiResponse = `✅ Account created successfully! Your ${createdAccounts[0]?.name || 'account'} is now ready.`;
         } else {
           // Get AI response for non-account creation messages
-          aiResponse = await aiService.processMessage(message, context);
+          const compatibleContext = {
+            accounts: context.accounts.map(account => ({
+              id: account.id,
+              name: account.name,
+              currentBalance: account.currentBalance,
+              interestRate: account.interestRate,
+              startingBalance: account.startingBalance,
+              compoundFrequency: account.compoundFrequency,
+              goalType: account.goalType,
+              targetAmount: account.targetAmount,
+              targetDate: account.targetDate,
+              monthlyContribution: account.monthlyContribution,
+              createdAt: account.createdAt,
+              updatedAt: account.updatedAt
+            })),
+            summary: context.summary,
+            recentHistory: context.recentHistory,
+            timestamp: context.timestamp
+          };
+          aiResponse = await aiService.processMessage(message, compatibleContext);
         }
         
         // Add AI response
@@ -194,8 +219,14 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const savedHistory = localStorage.getItem('growthtracker_chat_history');
     if (savedHistory) {
       try {
-        const messages = JSON.parse(savedHistory);
-        messages.forEach((message: any) => {
+        const messages = JSON.parse(savedHistory) as Array<{
+          id: string;
+          content: string;
+          role: 'user' | 'assistant';
+          timestamp: string;
+          accountsCreated?: string[];
+        }>;
+        messages.forEach((message) => {
           // Convert timestamp back to Date object
           const restoredMessage: ChatMessage = {
             ...message,
